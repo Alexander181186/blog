@@ -10,7 +10,6 @@ class Tag(models.Model):
 #    def save_tag(self):
 #        self.save()
 
-    
     def __str__(self):
         return self.slug
 
