@@ -18,7 +18,7 @@ class Post(models.Model):
     created_date = models.DateField(auto_now_add=True)
     text = models.TextField('Текст')
     tags = []
-    add_tags = models.ManyToManyField(Tag, verbose_name='Тэги')
+    add_tags = models.ManyToManyField(Tag, verbose_name='Тэги', blank=True) #, null=True)
     tags.append(add_tags)
     
 #    def get_last_tag(self):
