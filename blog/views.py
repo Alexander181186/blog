@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Post
 from .models import Tag
+from .models import Comments
+from .forms import CommentsForm
 
 def pagination_posts(request, posts_list, n_posts):
     paginator = Paginator(posts_list, n_posts)
@@ -23,7 +25,14 @@ def post_list(request):
     
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    form = CommentsForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.save()  
+    form = CommentsForm()        
+    comments = Comments.objects.filter(post = post).order_by('created_date')        
+    return render(request, 'blog/post_detail.html', {'post': post, 'form': form, 'comments': comments})
 
 def post_tag(request, tag):
     received_tag = Tag.objects.filter(slug = tag)
